@@ -11,19 +11,21 @@ const server = http.createServer((req, res) => {
 		case 'GET':
 			res.write('GET ' + req.url);
 			break;
-		case 'POST':
-			res.write('POST ' + req.url);
-			let body = [];
-			req.on('data', (chunk) => {
-				body.push(chunk);
-			}).on('end', () => {
-				body = Buffer.concat(body).toString();
-				console.info('[' + now + '] Data posted: ' + body);
-			});
-			break;
-		default:
-			break;
-	}
+   case 'POST':
+     res.write('POST ' + req.url);
+     let rawData = '';
+     req.on('data', (chunk) => {
+       rawData = rawData + chunk;
+     }).on('end', () => {
+       console.info('[' + now + '] Data posted: ' + rawData);
+     });
+     break;
++  case 'DELETE':
++    res.write('DELETE ' + req.url);
++    break;
+   default:
+     break;
+}}
 	res.end();
 }).on('error', (e) => {
 	console.error('[' + new Date() + '] Server Error', e);
